@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://universalis.example/schemas/human-knowledge-record-1.0.0.json",
+  "$id": "urn:c2o-universalis:human-knowledge-record:1.0.0",
   "title": "Portable Human Knowledge Graph Record",
   "description": "Shared record envelope for provenance-stamped, bitemporal human knowledge claims and relationships. Ecosystems apply distinct policy profiles.",
   "type": "object",
