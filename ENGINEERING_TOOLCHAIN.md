@@ -44,7 +44,7 @@ All candidate names and capability descriptions originate in the owner-supplied 
 |---|---|
 | Toolchain candidates recorded | Documented |
 | Initial validator and workflow authored | Implemented in this branch |
-| CI execution | Pending GitHub Actions run |
+| CI execution | Passed — see HUMAN_KNOWLEDGE_VALIDATION.md |
 | Domain-specific candidate review | Pending |
 | Specialized integrations | Not yet implemented |
 | Independent verification | Pending |
