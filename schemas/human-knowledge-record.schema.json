@@ -412,5 +412,122 @@
         }
       }
     }
-  }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "verification": {
+            "properties": {
+              "status": {
+                "const": "verified"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "verification": {
+            "properties": {
+              "verifier_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "verified_at": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "receipt_ref": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "verifier_id",
+              "verified_at",
+              "receipt_ref"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "consent": {
+            "properties": {
+              "status": {
+                "const": "not_required"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "consent": {
+            "required": [
+              "rationale"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "record_status": {
+            "const": "superseded"
+          }
+        },
+        "required": [
+          "record_status"
+        ]
+      },
+      "then": {
+        "properties": {
+          "superseded_by": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "record_status": {
+            "const": "erased"
+          }
+        },
+        "required": [
+          "record_status"
+        ]
+      },
+      "then": {
+        "properties": {
+          "object": {
+            "type": "null"
+          },
+          "erasure": {
+            "properties": {
+              "content_removed": {
+                "const": true
+              },
+              "tombstone_only": {
+                "const": true
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
 }
