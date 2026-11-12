@@ -56,7 +56,7 @@ The validator's universalis profile rejects Controlled authority records.
 
 ## 5. Versioned MCP contract surface
 
-The shared interface family is proposed as versioned MCP schemas: memory_search, memory_remember, memory_think, correct, verify, and audit. Each request and response must expose stable IDs, provenance references, scope, uncertainty, consent/rights state, and errors. Public schemas describe interoperability only; they do not inherit or expose C2O-private identity, policy, authorization, or source data.
+The six shared v1 MCP request/response definitions are implemented in schemas/mcp/human-knowledge-tools.v1.schema.json; see MCP_INTERFACE_CONTRACTS.md. Each request and response exposes stable IDs, provenance references, scope, uncertainty, consent/rights state, and errors. The public schemas describe interoperability only; they do not inherit or expose C2O-private identity, policy, authorization, or source data.
 
 ## 6. Initial execution and limits
 
