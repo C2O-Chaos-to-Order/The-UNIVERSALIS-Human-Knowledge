@@ -53,3 +53,5 @@ All candidate names and capability descriptions originate in the owner-supplied 
 ## Human Knowledge architecture increment
 
 See `HUMAN_KNOWLEDGE_ARCHITECTURE.md` and `schemas/human-knowledge-record.schema.json`. This repository now defines the open, local-first profile with deterministic record checks, explicit contradictions, consent, independent verification receipts, and weakest-link confidence. The validator, negative tests, and synthetic fixture are in `.github/scripts/human_knowledge_contract.py` and `examples/human_knowledge/claim.json`. Candidate integrations remain proposed and unverified; they are not installed.
+
+The shared Human Knowledge MCP v1 request/response registry is in `schemas/mcp/human-knowledge-tools.v1.schema.json`; see `MCP_INTERFACE_CONTRACTS.md` and `HUMAN_KNOWLEDGE_VALIDATION.md` for the interface boundary, evidence, and outstanding validation limits.
