@@ -10,16 +10,18 @@
 
 | Check | Result | Run |
 |---|---|---|
-| Human Knowledge Contract workflow | Passed | [Run 43232571201](https://github.com/C2O-Chaos-to-Order/The-UNIVERSALIS-Human-Knowledge/actions/runs/43232571201) |
-| Repository quality baseline | Passed | [Run 43232571175](https://github.com/C2O-Chaos-to-Order/The-UNIVERSALIS-Human-Knowledge/actions/runs/43232571175) |
+| Human Knowledge Contract workflow | Passed | [Run 43233072778](https://github.com/C2O-Chaos-to-Order/The-UNIVERSALIS-Human-Knowledge/actions/runs/43233072778) |
+| Repository quality baseline | Passed | [Run 43233072777](https://github.com/C2O-Chaos-to-Order/The-UNIVERSALIS-Human-Knowledge/actions/runs/43233072777) |
 
-The Human Knowledge Contract workflow completed its Python runtime step, positive/negative contract self-tests, repository example validation using the universalis profile, and repository baseline checks. The repository-quality workflow completed its validator self-test and JSON syntax checks.
+The Human Knowledge Contract workflow completed its Python runtime step, positive/negative contract self-tests, repository example validation using the universalis profile, MCP registry structure checks, and repository baseline checks. The repository-quality workflow completed its validator self-test and JSON syntax checks.
 
 ## Contract test coverage
 
 Positive checks:
 - The synthetic example is accepted by the UNIVERSALIS profile.
 - The synthetic example is accepted by the C2O profile.
+- The six MCP v1 tool contracts are present, each mapped to request and response definitions.
+- The public MCP schema registry exposes no property named as a password, token, API key, secret, or credential.
 - A C2O Controlled record with approver, approval, and policy references is accepted by the C2O profile.
 
 Negative checks:
@@ -40,8 +42,8 @@ Negative checks:
 
 ## Limits and unresolved work
 
-- The workflow does **not** run a full JSON Schema 2020-12 validator against the schema and fixture. JSON syntax validation and the custom semantic checks are not equivalent to complete standards-conformant schema validation.
-- No production graph database, temporal query engine, MCP server, authorization service, cryptographic signing, immutable receipt store, source connector, or automated erasure/dependency rebuild is implemented.
+- The workflow does **not** run a full JSON Schema 2020-12 validator against the record schema, MCP registry, and fixtures. JSON syntax validation and the custom structural/semantic checks are not equivalent to complete standards-conformant schema validation.
+- No production graph database, temporal query engine, MCP server, transport authorization service, cryptographic signing, immutable receipt store, source connector, or automated erasure/dependency rebuild is implemented.
 - The tests use synthetic fixture data only; no private human records or tacit-knowledge fragments were ingested.
 - The candidate projects named in the architecture document have not been independently reviewed for canonical source, license, maintenance, releases, security, compatibility, or claims; none is marked installed or adopted.
 - These results do not establish production readiness, independent verification of real-world claims, or operational authorization.
