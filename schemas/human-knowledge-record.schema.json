@@ -1,0 +1,416 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://universalis.example/schemas/human-knowledge-record-1.0.0.json",
+  "title": "Portable Human Knowledge Graph Record",
+  "description": "Shared record envelope for provenance-stamped, bitemporal human knowledge claims and relationships. Ecosystems apply distinct policy profiles.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "record_id",
+    "record_kind",
+    "record_status",
+    "subject",
+    "predicate",
+    "object",
+    "scope",
+    "valid_time",
+    "transaction_time",
+    "provenance",
+    "consent",
+    "verification",
+    "confidence",
+    "authority_class",
+    "contradiction_refs",
+    "superseded_by",
+    "erasure"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "record_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "record_kind": {
+      "enum": [
+        "claim",
+        "relationship"
+      ]
+    },
+    "record_status": {
+      "enum": [
+        "active",
+        "superseded",
+        "retracted",
+        "erased"
+      ]
+    },
+    "subject": {
+      "$ref": "#/$defs/graphRef"
+    },
+    "predicate": {
+      "type": "string",
+      "minLength": 1
+    },
+    "object": {
+      "type": [
+        "object",
+        "string",
+        "number",
+        "boolean",
+        "null"
+      ]
+    },
+    "scope": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "valid_time": {
+      "$ref": "#/$defs/timeRange"
+    },
+    "transaction_time": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "recorded_at",
+        "recorded_to"
+      ],
+      "properties": {
+        "recorded_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "recorded_to": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "asserted_by",
+        "sources",
+        "derived_from"
+      ],
+      "properties": {
+        "asserted_by": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "actor_type"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "actor_type": {
+              "enum": [
+                "human",
+                "agent",
+                "system"
+              ]
+            }
+          }
+        },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/source"
+          }
+        },
+        "derived_from": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "consent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "purpose",
+        "scope",
+        "recorded_at",
+        "recorded_by"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "granted",
+            "not_required",
+            "withdrawn"
+          ]
+        },
+        "purpose": {
+          "type": "string",
+          "minLength": 1
+        },
+        "scope": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "recorded_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "recorded_by": {
+          "type": "string",
+          "minLength": 1
+        },
+        "rationale": {
+          "type": "string"
+        }
+      }
+    },
+    "verification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "verifier_id",
+        "verified_at",
+        "receipt_ref",
+        "method"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "unverified",
+            "verified",
+            "refuted",
+            "contested",
+            "unverifiable"
+          ]
+        },
+        "verifier_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "verified_at": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "receipt_ref": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "method": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "confidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "score",
+        "method",
+        "lineage_scores"
+      ],
+      "properties": {
+        "score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "method": {
+          "enum": [
+            "human_assessed",
+            "evidence_weighted",
+            "weakest_link"
+          ]
+        },
+        "lineage_scores": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        }
+      }
+    },
+    "authority_class": {
+      "enum": [
+        "Evidence",
+        "Advisory",
+        "Controlled"
+      ]
+    },
+    "authority_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "approver_id": {
+          "type": "string"
+        },
+        "approval_ref": {
+          "type": "string"
+        },
+        "policy_ref": {
+          "type": "string"
+        }
+      }
+    },
+    "contradiction_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "superseded_by": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "erasure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "content_removed",
+        "tombstone_only"
+      ],
+      "properties": {
+        "content_removed": {
+          "type": "boolean"
+        },
+        "tombstone_only": {
+          "type": "boolean"
+        },
+        "request_ref": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    }
+  },
+  "$defs": {
+    "graphRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "type"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "timeRange": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "from",
+        "to"
+      ],
+      "properties": {
+        "from": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "to": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_id",
+        "source_kind",
+        "locator",
+        "content_sha256",
+        "captured_at",
+        "rights_status"
+      ],
+      "properties": {
+        "source_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_kind": {
+          "enum": [
+            "human",
+            "document",
+            "repository",
+            "web",
+            "device",
+            "dataset",
+            "agent",
+            "manual"
+          ]
+        },
+        "locator": {
+          "type": "string",
+          "minLength": 1
+        },
+        "content_sha256": {
+          "type": "string",
+          "pattern": "^[a-fA-F0-9]{64}$"
+        },
+        "captured_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "rights_status": {
+          "enum": [
+            "known",
+            "unknown",
+            "restricted",
+            "public_domain",
+            "open_license",
+            "permissioned"
+          ]
+        },
+        "license_id": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
