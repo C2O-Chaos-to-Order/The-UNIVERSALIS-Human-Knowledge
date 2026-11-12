@@ -129,9 +129,48 @@ def self_test() -> None:
     validate_record(controlled, "c2o")
     print("Human-knowledge contract self-test: PASS (2 profile positives, 7 negative cases)")
 
+
+MCP_TOOL_NAMES = {"memory_search", "memory_remember", "memory_think", "correct", "verify", "audit"}
+FORBIDDEN_PUBLIC_FIELDS = {"password", "token", "access_token", "api_key", "secret", "credential", "credentials", "approval_token"}
+
+def check_mcp_contracts(root: Path) -> list[str]:
+    path = root / "schemas" / "mcp" / "human-knowledge-tools.v1.schema.json"
+    failures = []
+    try:
+        registry = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+        return [f"{path}: {exc}"]
+    definitions = registry.get("$defs", {})
+    tool_map = definitions.get("tool_map", {}).get("properties", {})
+    if set(tool_map) != MCP_TOOL_NAMES:
+        failures.append(f"{path}: expected exactly six shared MCP tool contracts")
+    required_defs = {name + suffix for name in MCP_TOOL_NAMES for suffix in ("_request", "_response")}
+    if not required_defs.issubset(definitions):
+        failures.append(f"{path}: request/response definitions are incomplete")
+    def walk(node):
+        if isinstance(node, dict):
+            props = node.get("properties")
+            if isinstance(props, dict):
+                leaked = FORBIDDEN_PUBLIC_FIELDS.intersection(props)
+                if leaked:
+                    failures.append(f"{path}: secret-bearing public properties: " + ", ".join(sorted(leaked)))
+            for value in node.values():
+                walk(value)
+        elif isinstance(node, list):
+            for value in node:
+                walk(value)
+    walk(registry)
+    for name, mapping in tool_map.items():
+        refs = mapping.get("properties", {})
+        request_ref = refs.get("request", {}).get("$ref")
+        response_ref = refs.get("response", {}).get("$ref")
+        if request_ref != "#/$defs/" + name + "_request" or response_ref != "#/$defs/" + name + "_response":
+            failures.append(f"{path}: invalid request/response mapping for {name}")
+    return failures
+
 def check(root: Path, profile: str) -> int:
     files = sorted((root / "examples" / "human_knowledge").glob("*.json"))
-    failures = []
+    failures = check_mcp_contracts(root)
     for path in files:
         try:
             validate_record(json.loads(path.read_text(encoding="utf-8")), profile)
@@ -143,6 +182,7 @@ def check(root: Path, profile: str) -> int:
             print(" - " + failure)
         return 1
     print(f"Human-knowledge record validation: PASS ({len(files)} example(s), profile={profile})")
+    print("MCP interface contracts: PASS (six versioned tools; no secret-bearing fields)")
     return 0
 
 def main() -> int:
