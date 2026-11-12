@@ -64,6 +64,8 @@ def validate_record(record: dict, profile: str = "universalis") -> None:
     if consent["status"] == "withdrawn" and record["record_status"] == "active":
         raise ValueError("withdrawn consent cannot leave a record active")
     verification = record["verification"]
+    if verification.get("status") not in {"unverified", "verified", "refuted", "contested", "unverifiable"}:
+        raise ValueError("verification status is invalid")
     if verification.get("status") == "verified":
         verifier = verification.get("verifier_id")
         if not verifier or verifier == prov["asserted_by"]["id"]:
@@ -89,8 +91,11 @@ def validate_record(record: dict, profile: str = "universalis") -> None:
     if record["record_status"] == "superseded" and not record.get("superseded_by"):
         raise ValueError("superseded records require superseded_by")
     erasure = record["erasure"]
-    if record["record_status"] == "erased" and (not erasure.get("content_removed") or not erasure.get("tombstone_only")):
-        raise ValueError("erased records must retain tombstone metadata only, not source content")
+    if record["record_status"] == "erased":
+        if not erasure.get("content_removed") or not erasure.get("tombstone_only"):
+            raise ValueError("erased records must retain tombstone metadata only, not source content")
+        if record["object"] is not None:
+            raise ValueError("erased records must not retain the original claim object")
 
 def self_test() -> None:
     sample_path = Path(__file__).resolve().parents[2] / "examples" / "human_knowledge" / "claim.json"
@@ -108,6 +113,10 @@ def self_test() -> None:
     cases.append((bad, "consent"))
     bad = json.loads(json.dumps(sample)); bad["authority_class"] = "Controlled"
     cases.append((bad, "Controlled authority"))
+    bad = json.loads(json.dumps(sample)); bad["record_status"] = "erased"; bad["erasure"] = {"content_removed":True,"tombstone_only":True,"request_ref":"erase:1"}
+    cases.append((bad, "erasure retaining claim object"))
+    bad = json.loads(json.dumps(sample)); bad["valid_time"]["to"] = "2026-11-01T00:00:00Z"
+    cases.append((bad, "invalid bitemporal range"))
     for bad_record, expected in cases:
         try:
             validate_record(bad_record, "universalis")
@@ -118,7 +127,7 @@ def self_test() -> None:
     controlled["authority_class"] = "Controlled"
     controlled["authority_context"] = {"approver_id":"reviewer-1","approval_ref":"approval:1","policy_ref":"policy:1"}
     validate_record(controlled, "c2o")
-    print("Human-knowledge contract self-test: PASS (2 profile positives, 5 negative cases)")
+    print("Human-knowledge contract self-test: PASS (2 profile positives, 7 negative cases)")
 
 def check(root: Path, profile: str) -> int:
     files = sorted((root / "examples" / "human_knowledge").glob("*.json"))
