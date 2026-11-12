@@ -75,7 +75,7 @@ The current increment is a portable JSON contract, deterministic Python checks, 
 | Candidate tools and architecture recorded | Documented |
 | Portable record schema | Implemented in this branch |
 | Dependency-free semantic validator and negative tests | Implemented in this branch |
-| Synthetic fixture and CI execution | Pending workflow result |
+| Synthetic fixture and CI execution | Passed — see HUMAN_KNOWLEDGE_VALIDATION.md |
 | Full JSON Schema validation | Not implemented |
 | Production graph storage, MCP server, and external verifiers | Not implemented |
 | Candidate tool source/license/security review | Pending |
