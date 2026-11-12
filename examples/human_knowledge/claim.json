@@ -1,0 +1,77 @@
+{
+  "schema_version": "1.0.0",
+  "record_id": "urn:example:human-knowledge:claim-001",
+  "record_kind": "claim",
+  "record_status": "active",
+  "subject": {
+    "id": "urn:example:concept:provenance",
+    "type": "Concept"
+  },
+  "predicate": "example:definition",
+  "object": {
+    "datatype": "text",
+    "value": "A provenance record identifies where a claim came from and how it was reviewed."
+  },
+  "scope": [
+    "illustrative-fixture"
+  ],
+  "valid_time": {
+    "from": "2026-11-12T00:00:00Z",
+    "to": null
+  },
+  "transaction_time": {
+    "recorded_at": "2026-11-12T00:00:00Z",
+    "recorded_to": null
+  },
+  "provenance": {
+    "asserted_by": {
+      "id": "fixture-author",
+      "actor_type": "human"
+    },
+    "sources": [
+      {
+        "source_id": "fixture-source-001",
+        "source_kind": "manual",
+        "locator": "urn:example:source:fixture-only",
+        "content_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "captured_at": "2026-11-12T00:00:00Z",
+        "rights_status": "known",
+        "license_id": "CC0-1.0"
+      }
+    ],
+    "derived_from": []
+  },
+  "consent": {
+    "status": "not_required",
+    "purpose": "synthetic test fixture",
+    "scope": [
+      "fixture-only"
+    ],
+    "recorded_at": "2026-11-12T00:00:00Z",
+    "recorded_by": "fixture-maintainer",
+    "rationale": "Contains no real person's data or tacit human contribution."
+  },
+  "verification": {
+    "status": "unverified",
+    "verifier_id": null,
+    "verified_at": null,
+    "receipt_ref": null,
+    "method": "Not yet independently checked; fixture only."
+  },
+  "confidence": {
+    "score": 0.5,
+    "method": "weakest_link",
+    "lineage_scores": [
+      0.5
+    ]
+  },
+  "authority_class": "Evidence",
+  "authority_context": {},
+  "contradiction_refs": [],
+  "superseded_by": null,
+  "erasure": {
+    "content_removed": false,
+    "tombstone_only": false,
+    "request_ref": null
+  }
+}
