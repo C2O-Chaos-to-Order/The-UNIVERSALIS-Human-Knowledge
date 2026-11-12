@@ -55,3 +55,13 @@ All candidate names and capability descriptions originate in the owner-supplied 
 See `HUMAN_KNOWLEDGE_ARCHITECTURE.md` and `schemas/human-knowledge-record.schema.json`. This repository now defines the open, local-first profile with deterministic record checks, explicit contradictions, consent, independent verification receipts, and weakest-link confidence. The validator, negative tests, and synthetic fixture are in `.github/scripts/human_knowledge_contract.py` and `examples/human_knowledge/claim.json`. Candidate integrations remain proposed and unverified; they are not installed.
 
 The shared Human Knowledge MCP v1 request/response registry is in `schemas/mcp/human-knowledge-tools.v1.schema.json`; see `MCP_INTERFACE_CONTRACTS.md` and `HUMAN_KNOWLEDGE_VALIDATION.md` for the interface boundary, evidence, and outstanding validation limits.
+
+## Powers energy architecture register — 2026-11-12
+
+Powers treat energy efficiency as a measurable, enforceable, auditable capacity—not only a permission or evaluation. In the current UNIVERSALIS repository set, the canonical implementation is maintained in the Intelligence Powers repository.
+
+- **Canonical open architecture:** [UNIVERSALIS Powers energy architecture](https://github.com/C2O-Chaos-to-Order/The-UNIVERSALIS-Intelligence-Powers/blob/implementation/repository-foundation-2026-11-12/POWERS_ENERGY_ARCHITECTURE.md).
+- **Shared v1 contract:** [Powers energy schema](https://github.com/C2O-Chaos-to-Order/The-UNIVERSALIS-Intelligence-Powers/blob/implementation/repository-foundation-2026-11-12/schemas/powers/powers-energy-contracts.v1.schema.json).
+- **Executed checks and limitations:** [Powers validation record](https://github.com/C2O-Chaos-to-Order/The-UNIVERSALIS-Intelligence-Powers/blob/implementation/repository-foundation-2026-11-12/POWERS_ENERGY_VALIDATION.md).
+
+The open implementation is local-first and independently operable. Measurement, forecasting, receipts, and synergy calculation do not require a central database or truth authority. It keeps actual workload telemetry and local policy in the operator's chosen environment. The shared contract excludes private credentials and policy values. PDU/RAPL/Kepler/GPU layers require overlap reconciliation; synergy comparisons require matched workload cohorts and SLO profiles. External tools and their advertised savings remain candidates until independently verified.
