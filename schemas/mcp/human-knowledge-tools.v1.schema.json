@@ -1,0 +1,767 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:c2o-universalis:mcp:human-knowledge-tools:v1",
+  "title": "Shared Human Knowledge MCP Tool Map v1",
+  "description": "Versioned public request/response contracts. Authentication and authorization are external to these payload schemas.",
+  "$ref": "#/$defs/tool_map",
+  "$defs": {
+    "memory_search_request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "query",
+        "scopes",
+        "limit"
+      ],
+      "properties": {
+        "query": {
+          "type": "string",
+          "minLength": 1
+        },
+        "scopes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "limit": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "as_of": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "record_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "memory_search_response": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "request_id",
+        "status",
+        "results",
+        "has_more"
+      ],
+      "properties": {
+        "request_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "enum": [
+            "success",
+            "partial",
+            "no_match"
+          ]
+        },
+        "results": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "record_id",
+              "verification_status",
+              "confidence",
+              "authority_label"
+            ],
+            "properties": {
+              "record_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "verification_status": {
+                "enum": [
+                  "unverified",
+                  "verified",
+                  "refuted",
+                  "contested",
+                  "unverifiable"
+                ]
+              },
+              "confidence": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "authority_label": {
+                "enum": [
+                  "Evidence",
+                  "Advisory"
+                ]
+              },
+              "source_refs": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "uniqueItems": true
+              }
+            }
+          }
+        },
+        "has_more": {
+          "type": "boolean"
+        },
+        "next_cursor": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "memory_remember_request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "record"
+      ],
+      "properties": {
+        "mode": {
+          "enum": [
+            "propose",
+            "append"
+          ]
+        },
+        "record": {
+          "$ref": "urn:c2o-universalis:human-knowledge-record:1.0.0"
+        },
+        "requested_by": {
+          "type": "string",
+          "minLength": 1
+        },
+        "purpose": {
+          "type": "string",
+          "minLength": 1
+        },
+        "request_id": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "memory_remember_response": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "request_id",
+        "status",
+        "record_id",
+        "review_required",
+        "validation_errors"
+      ],
+      "properties": {
+        "request_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "enum": [
+            "accepted",
+            "pending_review",
+            "rejected"
+          ]
+        },
+        "record_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "review_required": {
+          "type": "boolean"
+        },
+        "validation_errors": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "receipt_ref": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "memory_think_request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "question",
+        "scopes",
+        "record_ids",
+        "max_claims"
+      ],
+      "properties": {
+        "question": {
+          "type": "string",
+          "minLength": 1
+        },
+        "scopes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "record_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "max_claims": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 50
+        },
+        "as_of": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "memory_think_response": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "request_id",
+        "summary",
+        "claims",
+        "contradictions",
+        "gaps",
+        "uncertainty"
+      ],
+      "properties": {
+        "request_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "summary": {
+          "type": "string"
+        },
+        "claims": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "statement",
+              "record_refs",
+              "stance"
+            ],
+            "properties": {
+              "statement": {
+                "type": "string",
+                "minLength": 1
+              },
+              "record_refs": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "stance": {
+                "enum": [
+                  "supported",
+                  "refuted",
+                  "contested",
+                  "unverifiable",
+                  "not_checked"
+                ]
+              }
+            }
+          }
+        },
+        "contradictions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "left_record_id",
+              "right_record_id"
+            ],
+            "properties": {
+              "left_record_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "right_record_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "reason": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "gaps": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "uncertainty": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      }
+    },
+    "correct_request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "record_id",
+        "correction_type",
+        "reason",
+        "evidence_source_ids",
+        "requested_by"
+      ],
+      "properties": {
+        "record_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "correction_type": {
+          "enum": [
+            "supersede",
+            "contradict",
+            "retract",
+            "erase"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence_source_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "requested_by": {
+          "type": "string",
+          "minLength": 1
+        },
+        "replacement_record": {
+          "$ref": "urn:c2o-universalis:human-knowledge-record:1.0.0"
+        },
+        "request_id": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "correct_response": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "request_id",
+        "status",
+        "prior_record_id",
+        "affected_record_ids"
+      ],
+      "properties": {
+        "request_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "enum": [
+            "accepted",
+            "pending_review",
+            "rejected"
+          ]
+        },
+        "prior_record_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "new_record_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "affected_record_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "receipt_ref": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "reason": {
+          "type": "string"
+        }
+      }
+    },
+    "verify_request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "record_id",
+        "verification_method",
+        "independent_verifier_ref",
+        "input_refs"
+      ],
+      "properties": {
+        "record_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "verification_method": {
+          "type": "string",
+          "minLength": 1
+        },
+        "independent_verifier_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "input_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "request_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "expected_artifact_hash": {
+          "type": "string",
+          "pattern": "^[a-fA-F0-9]{64}$"
+        }
+      }
+    },
+    "verify_response": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "request_id",
+        "verdict",
+        "verified_by",
+        "verified_at",
+        "receipt_id",
+        "result_hash",
+        "limitations"
+      ],
+      "properties": {
+        "request_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "verdict": {
+          "enum": [
+            "verified",
+            "refuted",
+            "contested",
+            "unverifiable",
+            "not_checked"
+          ]
+        },
+        "verified_by": {
+          "type": "string",
+          "minLength": 1
+        },
+        "verified_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "receipt_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "result_hash": {
+          "type": "string",
+          "pattern": "^[a-fA-F0-9]{64}$"
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "replay_uri": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "audit_request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scopes",
+        "record_ids",
+        "event_types",
+        "include_payload"
+      ],
+      "properties": {
+        "scopes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "record_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "event_types": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "from": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "to": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "include_payload": {
+          "type": "boolean"
+        },
+        "request_id": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "audit_response": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "request_id",
+        "events",
+        "chain_valid"
+      ],
+      "properties": {
+        "request_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "chain_valid": {
+          "type": "boolean"
+        },
+        "events": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "event_id",
+              "event_type",
+              "record_id",
+              "occurred_at",
+              "actor_ref",
+              "event_hash"
+            ],
+            "properties": {
+              "event_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "event_type": {
+                "type": "string",
+                "minLength": 1
+              },
+              "record_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "occurred_at": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "actor_ref": {
+                "type": "string",
+                "minLength": 1
+              },
+              "previous_hash": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "event_hash": {
+                "type": "string",
+                "pattern": "^[a-fA-F0-9]{64}$"
+              },
+              "receipt_ref": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "redacted": {
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      }
+    },
+    "tool_map": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "memory_search",
+        "memory_remember",
+        "memory_think",
+        "correct",
+        "verify",
+        "audit"
+      ],
+      "properties": {
+        "memory_search": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "request",
+            "response"
+          ],
+          "properties": {
+            "request": {
+              "$ref": "#/$defs/memory_search_request"
+            },
+            "response": {
+              "$ref": "#/$defs/memory_search_response"
+            }
+          }
+        },
+        "memory_remember": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "request",
+            "response"
+          ],
+          "properties": {
+            "request": {
+              "$ref": "#/$defs/memory_remember_request"
+            },
+            "response": {
+              "$ref": "#/$defs/memory_remember_response"
+            }
+          }
+        },
+        "memory_think": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "request",
+            "response"
+          ],
+          "properties": {
+            "request": {
+              "$ref": "#/$defs/memory_think_request"
+            },
+            "response": {
+              "$ref": "#/$defs/memory_think_response"
+            }
+          }
+        },
+        "correct": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "request",
+            "response"
+          ],
+          "properties": {
+            "request": {
+              "$ref": "#/$defs/correct_request"
+            },
+            "response": {
+              "$ref": "#/$defs/correct_response"
+            }
+          }
+        },
+        "verify": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "request",
+            "response"
+          ],
+          "properties": {
+            "request": {
+              "$ref": "#/$defs/verify_request"
+            },
+            "response": {
+              "$ref": "#/$defs/verify_response"
+            }
+          }
+        },
+        "audit": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "request",
+            "response"
+          ],
+          "properties": {
+            "request": {
+              "$ref": "#/$defs/audit_request"
+            },
+            "response": {
+              "$ref": "#/$defs/audit_response"
+            }
+          }
+        }
+      }
+    }
+  }
+}
