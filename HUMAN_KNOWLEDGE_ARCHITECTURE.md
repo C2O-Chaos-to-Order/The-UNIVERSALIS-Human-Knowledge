@@ -1,7 +1,7 @@
 # UNIVERSALIS Human Knowledge Architecture
 
-**Owner:** UNIVERSALIS / MotherThread  
-**Repository boundary:** Public and independently operable. No C2O-private credentials, policies, authority state, private research records, or operational data may be added.  
+**Owner:** UNIVERSALIS / MotherThread
+**Repository boundary:** Public and independently operable. No C2O-private credentials, policies, authority state, private research records, or operational data may be added.
 **Status:** Initial portable record contract and deterministic validation profile implemented on the repository foundation branch. Tool integrations remain proposed pending verification.
 
 ## 1. Architectural invariant

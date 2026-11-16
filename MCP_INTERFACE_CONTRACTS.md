@@ -1,6 +1,6 @@
 # Shared Human Knowledge MCP Interface Contracts
 
-**Version:** v1  
+**Version:** v1
 **Status:** Six interface contracts implemented as JSON Schema definitions in schemas/mcp/human-knowledge-tools.v1.schema.json. A production MCP server and authorization middleware are not implemented.
 
 ## 1. Purpose and boundary

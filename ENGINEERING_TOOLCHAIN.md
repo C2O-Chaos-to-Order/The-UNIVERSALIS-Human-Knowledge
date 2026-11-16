@@ -1,8 +1,8 @@
 # Engineering Toolchain and Initial Build Plan
 
-**Repository:** `C2O-Chaos-to-Order/The-UNIVERSALIS-Human-Knowledge`  
-**Repository responsibility:** Human Knowledge  
-**Status:** Initial executable foundation proposed in this branch; specialized candidates remain proposed pending verification.  
+**Repository:** `C2O-Chaos-to-Order/The-UNIVERSALIS-Human-Knowledge`
+**Repository responsibility:** Human Knowledge
+**Status:** Initial executable foundation proposed in this branch; specialized candidates remain proposed pending verification.
 **Boundary:** UNIVERSALIS public / independently operable. Do not add C2O-private credentials, policies, authority state, or private operational data.
 
 ## 1. Universal engineering foundation
